@@ -25,8 +25,6 @@ class LoadFactOperator(BaseOperator):
     def execute(self, context):
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
-        self.log.info(f"Dropping the table {self.table} in redshift")
-        redshift.run(f"DROP table if exists {self.table}")
         
         self.log.info(f"Creating the table {self.table} in redshift")
         redshift.run(format(self.create_sql))

@@ -22,12 +22,17 @@ class DataQualityOperator(BaseOperator):
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
         self.log.info("performaing quality check in redshift")
+        failed= False
         
         for test in self.test_sql:
             expected_result = test["expected_result"]
-            test_result = redshoft.run(test["query"])
+            test_result = redshift.run(test["query"])
             
             if expected_result != test_result:
                 query = test["query"]
-                self.log.info(f"test query {query} failed")
+                self.log.info(f"test query failed!!!! : {query} ")
+                failed = True
+                
+        if not failed:
+            self.log.info("All QA tests have passed!")
             
